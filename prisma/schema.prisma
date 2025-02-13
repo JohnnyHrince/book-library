@@ -19,12 +19,12 @@ model Book {
   title      String
   author     String
   categoryId Int
-  category   Category  @relation(fields: [categoryId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id            Int @id @default(autoincrement())
-  name          String @unique
+  id            Int        @id @default(autoincrement())
+  name          String     @unique
   parentId      Int?
   parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
   subcategories Category[] @relation("Subcategories")

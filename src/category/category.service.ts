@@ -35,7 +35,32 @@ export class CategoryService {
     return `This action updates a #${id} category`;
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(categoryId: number) {
+    const subcategories = await this.databaseService.category.findMany({
+      where: { 
+        parentId: categoryId 
+      },
+      select: { 
+        id: true 
+      },
+    });
+
+    const subcategoryIds = subcategories.map(sub => sub.id);
+
+    await this.databaseService.book.deleteMany({
+      where: {
+        categoryId: { in: [categoryId, ...subcategoryIds] },
+      },
+    });
+
+    await this.databaseService.category.deleteMany({
+      where: { id: { in: subcategoryIds } },
+    });
+
+    await this.databaseService.category.delete({
+      where: { id: categoryId },
+    });
+
+    return { message: `Category and all related books deleted successfully` };
   }
 }

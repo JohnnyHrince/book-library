@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Prisma } from '@prisma/client';
 
@@ -21,9 +21,14 @@ export class BookController {
     return this.bookService.getBooksByCategory(Number(id));
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookService.findOne(+id);
+  @Get('categoryNested/:id')
+  async getBooksByCategoryAndSubcategories(@Param('id') id: string) {
+    return this.bookService.getBooksByCategoryAndSubcategories(Number(id));
+  }
+
+  @Get(':bookId')
+  async getBook(@Param('bookId', ParseIntPipe) bookId: number) {
+    return this.bookService.getBookWithCategoryPath(bookId);
   }
 
   @Patch(':id')
