@@ -19,3 +19,11 @@ model Book {
   name String @unique
   category String
 }
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  parentId   Int?
+  parent     Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  subcategories Category[] @relation("Subcategories")
+}
