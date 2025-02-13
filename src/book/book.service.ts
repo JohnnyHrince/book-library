@@ -12,6 +12,17 @@ export class BookService {
     })
   }
 
+  async getBooksByCategory(categoryId: number) {
+    return this.databaseService.book.findMany({
+      where: {
+        categoryId: categoryId,
+      },
+      include: {
+        category: true,
+      },
+    });
+  }
+
   async findAll() {
     return this.databaseService.book.findMany();
   }

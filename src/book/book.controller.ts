@@ -16,6 +16,11 @@ export class BookController {
     return this.bookService.findAll();
   }
 
+  @Get('category/:id')
+  async getBooksByCategory(@Param('id') id: string) {
+    return this.bookService.getBooksByCategory(Number(id));
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookService.findOne(+id);

@@ -15,15 +15,18 @@ datasource db {
 }
 
 model Book {
-  id Int @id @default(autoincrement())
-  name String @unique
-  category String
+  id         Int       @id @default(autoincrement())
+  title      String
+  author     String
+  categoryId Int
+  category   Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String @unique
-  parentId   Int?
-  parent     Category?  @relation("Subcategories", fields: [parentId], references: [id])
+  id            Int @id @default(autoincrement())
+  name          String @unique
+  parentId      Int?
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id])
   subcategories Category[] @relation("Subcategories")
+  books         Book[]
 }
